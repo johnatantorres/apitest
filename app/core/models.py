@@ -1,0 +1,1 @@
+from app.chat.models import Base as chat_models
