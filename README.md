@@ -27,18 +27,13 @@ Follow these steps carefully to get the project running.
 3.  Open the new `.env` file with a text editor. You will see something like this:
 
     ```
-    DATABASE_URL=postgresql://user:password@localhost:5432/mydatabase
+    DATABASE_URL=postgresql://user:password@db:5432/mydatabase
     GOOGLE_API_KEY="YOUR_GOOGLE_AI_API_KEY"
     LANGCHAIN_TRACING_V2="true"
     LANGCHAIN_API_KEY="YOUR_LANGSMITH_API_KEY"
     ```
 
-4.  **You must make two changes:**
-    *   **Change the database host:** Modify the `DATABASE_URL` line to connect to the database container. Change `localhost` to `db`.
-        ```diff
-        - DATABASE_URL=postgresql://user:password@localhost:5432/mydatabase
-        + DATABASE_URL=postgresql://user:password@db:5432/mydatabase
-        ```
+4.  **You must make a change:**
     *   **Add your API keys:** Replace the placeholder values for `GOOGLE_API_KEY` and `LANGCHAIN_API_KEY` with your actual keys.
 
 ## How to Run the Application
