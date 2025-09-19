@@ -1,5 +1,6 @@
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
 from datetime import datetime
+from sqlalchemy.orm import relationship
 
 from app.database import Base
 
@@ -10,7 +11,9 @@ class Users(Base):
     
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=True)
-    favorite_sport = Column(String, nullable=True)
+    sport_id = Column(ForeignKey('sports.id', ondelete="CASCADE"), nullable=True)
+
+    sport = relationship("Sports")
 
 class Threads(Base):
     __tablename__ = "threads"
@@ -26,3 +29,9 @@ class History(Base):
     input_message = Column(String, nullable=True)
     output_message = Column(String, nullable=True)
     timestamp = Column(DateTime, default=datetime.utcnow)
+
+class Sports(Base):
+    __tablename__ = "sports"
+    
+    id = Column(Integer, primary_key=True)
+    name = Column(String, nullable=True)
