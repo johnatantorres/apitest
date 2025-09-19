@@ -25,7 +25,7 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    command: sh -c "alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port 8000 --reload"
+    command: sh -c "alembic upgrade head && python seed_data.py && uvicorn main:app --host 0.0.0.0 --port 8000 --reload"
 
 volumes:
   postgres_data:
