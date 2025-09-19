@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session, joinedload
 from datetime import datetime
 from app.chat import models
-from fastapi import HTTPException, status
+from app.core.error_manager import user_not_found, thread_not_found, user_for_thread_not_found
 from langchain_google_genai import ChatGoogleGenerativeAI
 import os
 from dotenv import load_dotenv
@@ -35,7 +35,7 @@ async def initiate_thread_service(user_id: int, db: Session):
         db.refresh(new_thread)
         return {"thread_id": new_thread.id}
     else:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+        user_not_found()
 
 
 async def _get_list_history_chat(thread_id, db):
@@ -81,8 +81,14 @@ async def _save_chat_to_history(thread_id, input_message, output_message, db):
 
 async def initiate_chat_service(query: str, thread_id: int, db: Session):
     register_thread = db.query(models.Threads).filter(models.Threads.id == thread_id).first()
+    if not register_thread:
+        thread_not_found()
+
     user_id = register_thread.user_id
     user = db.query(models.Users).options(joinedload(models.Users.sport)).filter(models.Users.id == user_id).first()
+    if not user:
+        user_for_thread_not_found()
+
     if user.sport:
         Preferences.favorite_sport = user.sport.name
         Preferences.sport_id = user.sport.id
